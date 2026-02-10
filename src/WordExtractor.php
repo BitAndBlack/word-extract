@@ -11,13 +11,15 @@
 
 namespace BitAndBlack\WordExtract;
 
-readonly class WordExtractor
+class WordExtractor
 {
+    private string $pattern = '/(\w+\/\w+)|(\w+:\w+)|(\w+\*\w+)|\w+/u';
+
     /**
      * @param positive-int $minWordLength
      */
     public function __construct(
-        private int $minWordLength
+        private readonly int $minWordLength
     ) {
     }
 
@@ -39,7 +41,7 @@ readonly class WordExtractor
         };
 
         preg_replace_callback(
-            '/(\w+\/\w+)|(\w+:\w+)|(\w+\*\w+)|\w+/u',
+            $this->pattern,
             $callback,
             $content
         );
