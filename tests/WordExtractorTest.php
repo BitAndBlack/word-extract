@@ -60,6 +60,15 @@ final class WordExtractorTest extends TestCase
             ],
             12,
         ];
+
+        yield 'Uppercase extraction' => [
+            'Datenschutzerklärung DATENSCHUTZERKLÄRUNG',
+            [
+                'Datenschutzerklärung',
+                'DATENSCHUTZERKLÄRUNG',
+            ],
+            12,
+        ];
     }
 
     /**
