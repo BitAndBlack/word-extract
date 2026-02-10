@@ -85,4 +85,20 @@ final class WordExtractorTest extends TestCase
             $wordExtractor->getWords($sentence)
         );
     }
+
+    public function testGetWithWordsHandled(): void
+    {
+        $wordExtractor = new WordExtractor(12);
+
+        $input = 'Meine neue Datenschutzerklärung';
+        $wordsHandledExpected = 'Meine neue [Datenschutzerklärung]';
+
+        $handler = static fn (string $word): string => '[' . $word . ']';
+        $wordsHandled = $wordExtractor->getWithWordsHandled($input, $handler);
+
+        self::assertSame(
+            $wordsHandledExpected,
+            $wordsHandled
+        );
+    }
 }

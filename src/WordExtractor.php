@@ -24,28 +24,48 @@ class WordExtractor
     }
 
     /**
+     * Extracts all words that match the given minimum character count
+     * and returns them as a list.
+     *
      * @return array<int, string>
      */
     public function getWords(string $content): array
     {
         $words = [];
-        $callback = function (array $match) use (&$words): string {
-            $word = $match[0];
 
-            if (false === is_string($word) || mb_strlen($word) < $this->minWordLength) {
-                return '';
-            }
-
+        $wordExtractCallback = function (string $word) use (&$words): string {
             $words[] = $word;
-            return '';
+            return $word;
         };
 
-        preg_replace_callback(
-            $this->pattern,
-            $callback,
-            $content
-        );
+        $this->getWithWordsHandled($content, $wordExtractCallback);
 
         return $words;
+    }
+
+    /**
+     * Extracts all words that match the given minimum character count
+     * and sends them to the word handler. The updated input string will be returned.
+     *
+     * @param callable(string):string $wordHandler
+     */
+    public function getWithWordsHandled(string $content, callable $wordHandler): string
+    {
+        $pregReplaceCallback = function (array $match) use ($wordHandler): string {
+            /** @var array<int, string> $match */
+            $word = $match[0];
+
+            if (mb_strlen($word) < $this->minWordLength) {
+                return $word;
+            }
+
+            return (string) $wordHandler($word);
+        };
+
+        return (string) preg_replace_callback(
+            $this->pattern,
+            $pregReplaceCallback,
+            $content
+        );
     }
 }
