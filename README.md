@@ -10,7 +10,7 @@
 
 # Bit&Black Word Extract
 
-Extract words with a given minimum length.
+Extract or handle words with a given minimum length.
 
 ## Installation
 
@@ -48,6 +48,27 @@ $words = $wordExtractor->getWords($sentence);
  * }
  */
 var_dump($words);
+```
+
+Or use a callback to handle each of the extracted words:
+
+```php
+<?php
+
+$sentence = 'Herzlich willkommen in meinem Rosengarten';
+
+$handler = static function (string $word): string {
+    return '[' . $word . ']';
+};
+
+$sentenceHandled = $wordExtractor->getWithWordsHandled($sentence, $handler);
+
+/**
+ * This will dump
+ * 
+ * string(45) "Herzlich [willkommen] in meinem [Rosengarten]"
+ */
+var_dump($sentenceHandled);
 ```
 
 ## Help

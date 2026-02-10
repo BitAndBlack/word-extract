@@ -1,6 +1,6 @@
 {
     "name": "bitandblack/word-extract",
-    "description": "Extract words with a given minimum length.",
+    "description": "Extract or handle words with a given minimum length.",
     "license": "MIT",
     "type": "library",
     "authors": [
