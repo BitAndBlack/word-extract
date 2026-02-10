@@ -27,7 +27,7 @@ Initialise the [`WordExtractor`](./src/WordExtractor.php) class with the minimum
 
 use BitAndBlack\WordExtract\WordExtractor;
 
-$wordExtractor = new WordExtractor(12);
+$wordExtractor = new WordExtractor(10);
 ```
 
 Extract the words from a given string then:
