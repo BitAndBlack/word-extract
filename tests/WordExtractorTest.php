@@ -69,6 +69,14 @@ final class WordExtractorTest extends TestCase
             ],
             12,
         ];
+
+        yield 'Ignores dashes' => [
+            'Mutmacher/innen Stuttgart/Hamburg',
+            [
+                'Mutmacher/innen',
+            ],
+            10,
+        ];
     }
 
     /**

@@ -13,7 +13,7 @@ namespace BitAndBlack\WordExtract;
 
 class WordExtractor
 {
-    private string $pattern = '/(\w+\/\w+)|(\w+:\w+)|(\w+\*\w+)|\w+/u';
+    private string $pattern = '/(\w+\/\b\p{Ll}\p{L}*)|(\w+:\w+)|(\w+\*\w+)|\w+/u';
 
     /**
      * @param positive-int $minWordLength
