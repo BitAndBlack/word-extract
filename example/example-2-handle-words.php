@@ -17,9 +17,7 @@ $wordExtractor = new WordExtractor(10);
 
 $sentence = 'Herzlich willkommen in meinem Rosengarten';
 
-$handler = static function (string $word): string {
-    return '[' . $word . ']';
-};
+$handler = static fn (string $word): string => '[' . $word . ']';
 
 $sentenceHandled = $wordExtractor->getWithWordsHandled($sentence, $handler);
 

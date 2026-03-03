@@ -25,9 +25,6 @@ class WordExtractor implements WordExtractorInterface
     ) {
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getWords(string $content): array
     {
         $words = [];
@@ -45,9 +42,6 @@ class WordExtractor implements WordExtractorInterface
         return $words;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getWithWordsHandled(string $content, callable $wordHandler): string
     {
         $pregReplaceCallback = function (array $match) use ($wordHandler): string {
