@@ -2,3 +2,4 @@
 .idea
 *.lock
 .phpunit.cache/test-results
+.DS_Store
