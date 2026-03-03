@@ -11,7 +11,9 @@
 
 namespace BitAndBlack\WordExtract;
 
-class WordExtractor
+use BitAndBlack\Helpers\XMLHelper;
+
+class WordExtractor implements WordExtractorInterface
 {
     private string $pattern = '/(\w+\/\b\p{Ll}\p{L}*)|(\w+:\w+)|(\w+\*\w+)|\w+/u';
 
@@ -24,17 +26,17 @@ class WordExtractor
     }
 
     /**
-     * Extracts all words that match the given minimum character count
-     * and returns them as a list.
-     *
-     * @return array<int, string>
+     * @inheritDoc
      */
     public function getWords(string $content): array
     {
         $words = [];
 
         $wordExtractCallback = function (string $word) use (&$words): string {
-            $words[] = $word;
+            if ('' !== $word) {
+                $words[] = $word;
+            }
+
             return $word;
         };
 
@@ -44,10 +46,7 @@ class WordExtractor
     }
 
     /**
-     * Extracts all words that match the given minimum character count
-     * and sends them to the word handler. The updated input string will be returned.
-     *
-     * @param callable(string):string $wordHandler
+     * @inheritDoc
      */
     public function getWithWordsHandled(string $content, callable $wordHandler): string
     {
