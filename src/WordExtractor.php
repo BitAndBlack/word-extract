@@ -75,7 +75,13 @@ class WordExtractor implements WordExtractorInterface
         $domDocument = new DOMDocument('1.0', 'UTF-8');
         XMLHelper::loadHTML($domDocument, '<' . $tempNodeName . '>' . $content . '</' . $tempNodeName . '>');
 
-        $callback = fn (string $content): string => $this->getWithWordsHandled($content, $wordHandler, $ignoreHtml);
+        $callback = function (string $content) use ($pregReplaceCallback): string {
+            return (string) preg_replace_callback(
+                $this->pattern,
+                $pregReplaceCallback,
+                $content
+            );
+        };
 
         $this->extractDomContent(
             $domDocument,
