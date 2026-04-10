@@ -94,15 +94,61 @@ final class WordExtractorTest extends TestCase
         );
     }
 
-    public function testGetWithWordsHandled(): void
+    /**
+     * @return Generator<array<int, string>>
+     */
+    public static function getGetWithWordsHandledData(): Generator
+    {
+        yield [
+            'Meine neue Datenschutzerklärung',
+            'Meine neue [Datenschutzerklärung]',
+        ];
+
+        yield [
+            'Bodenseefelchen <span class="incrediblylongclassname">sind Fische!</span>. Klicke <a href="/bodenseefelchen.html" title="Alles über Bodenseefelchen">diesen Bodenseefelchenriesenlink</a>',
+            '[Bodenseefelchen] <span class="incrediblylongclassname">sind Fische!</span>. Klicke <a href="/bodenseefelchen.html" title="Alles über [Bodenseefelchen]">diesen [Bodenseefelchenriesenlink]</a>',
+        ];
+    }
+
+    #[DataProvider('getGetWithWordsHandledData')]
+    public function testGetWithWordsHandled(string $input, string $wordsHandledExpected): void
     {
         $wordExtractor = new WordExtractor(12);
 
-        $input = 'Meine neue Datenschutzerklärung';
-        $wordsHandledExpected = 'Meine neue [Datenschutzerklärung]';
-
         $handler = static fn (string $word): string => '[' . $word . ']';
         $wordsHandled = $wordExtractor->getWithWordsHandled($input, $handler);
+
+        self::assertSame(
+            $wordsHandledExpected,
+            $wordsHandled
+        );
+    }
+
+    /**
+     * @return Generator<array<int, string|bool>>
+     */
+    public static function getCanIgnoreTagsData(): Generator
+    {
+        yield [
+            '<p class="thisclassnameiswild">Meine neue Datenschutzerklärung – <span>eine Unfassbarkeit</span>!</p>',
+            '<p class="thisclassnameiswild">Meine neue [Datenschutzerklärung] – <span>eine [Unfassbarkeit]</span>!</p>',
+            false,
+        ];
+
+        yield [
+            '<p class="thisclassnameiswild">Meine neue Datenschutzerklärung – <span>eine Unfassbarkeit</span>!</p>',
+            '<p class="[thisclassnameiswild]">Meine neue [Datenschutzerklärung] – <span>eine [Unfassbarkeit]</span>!</p>',
+            true,
+        ];
+    }
+
+    #[DataProvider('getCanIgnoreTagsData')]
+    public function testCanIgnoreTags(string $input, string $wordsHandledExpected, bool $ignoreHtml): void
+    {
+        $wordExtractor = new WordExtractor(12);
+
+        $handler = static fn (string $word): string => '[' . $word . ']';
+        $wordsHandled = $wordExtractor->getWithWordsHandled($input, $handler, $ignoreHtml);
 
         self::assertSame(
             $wordsHandledExpected,

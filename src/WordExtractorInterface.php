@@ -27,5 +27,5 @@ interface WordExtractorInterface
      *
      * @param callable(non-empty-string):string $wordHandler
      */
-    public function getWithWordsHandled(string $content, callable $wordHandler): string;
+    public function getWithWordsHandled(string $content, callable $wordHandler, bool $ignoreHtml = false): string;
 }
